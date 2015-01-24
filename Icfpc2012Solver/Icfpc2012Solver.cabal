@@ -1,0 +1,31 @@
+name:           Icfpc2012Solver
+version:        0.1
+cabal-version:  >= 1.10
+build-type:     Simple
+author:         gas
+license:        MIT
+data-files:     
+                Data/Mazes/001.txt, 
+                Data/TestData/OneLine.txt, 
+                Data/TestData/TwoLines.txt, 
+                Data/TestData/TwoNonPaddedLines_expected, 
+                Data/TestData/TwoNonPaddedLines.txt
+data-dir:       Data
+maintainer:     gas
+
+executable Icfpc2012Solver
+  default-language: Haskell2010
+  hs-source-dirs:  src
+  main-is:         Main.hs
+  build-depends:   
+                   base >= 4,
+                   vector >=0.10 && <0.11
+  ghc-options:     -threaded -outputdir ./.bin
+  other-modules:    
+                    Paths_Icfpc2012Solver,
+                    LabyrinthParser.Parser,
+                    Runtime.Types,
+                    Testing.ParserTest,
+                    Common,
+                    LabyrinthParser.Validator
+
