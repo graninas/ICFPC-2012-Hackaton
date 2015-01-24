@@ -2,6 +2,7 @@ module Testing.EmulatorTest where
 
 import Common
 import Runtime.Emulator
+import Runtime.PrettyPrint as P
 import LabyrinthParser.Parser
 import Data.Either
 import qualified Data.Either.Unwrap as E
@@ -16,7 +17,7 @@ testMove (src, move, expected) = do
     Right e <- liftM parse $ loadTestData testFixture expected
     let result = runEmulation d move
     if (result == e) then putStrLn $ "passed: " ++ (getTestName "testMove" src) ++ "."
-                     else putStrLn $ "FAILED! " ++ (getTestName "testMove" src) ++ "."
+                     else putStrLn $ "FAILED! " ++ (getTestName "testMove" src) ++ ". Result maze:\n" ++ (unlines $ P.toList result)
     
 test :: IO ()
 test = do
