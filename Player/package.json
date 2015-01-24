@@ -1,0 +1,13 @@
+{
+  "name": "icfpc-player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ncurses": "^0.4.1",
+    "read-file": "^0.1.2",
+    "yargs": "^1.3.3"
+  }
+}
