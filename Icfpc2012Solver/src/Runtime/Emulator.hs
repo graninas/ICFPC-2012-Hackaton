@@ -5,6 +5,8 @@ import qualified Data.Vector as V
 
 import Data.Maybe (isJust)
 
+-- TODO: we need a constants for symbols.
+
 setRobot = undefined
 emptyCell = undefined
 openLift = undefined
@@ -29,7 +31,9 @@ moveRobot current@(x, y) 'L' m | isValidMove (x - 1, y) m = setRobot (x - 1, y) 
 moveRobot current@(x, y) 'R' m | isValidMove (x + 1, y) m = setRobot (x + 1, y) (emptyCell current m)
 moveRobot current@(x, y) 'U' m | isValidMove (x, y - 1) m = setRobot (x, y - 1) (emptyCell current m)
 moveRobot current@(x, y) 'D' m | isValidMove (x, y + 1) m = setRobot (x, y + 1) (emptyCell current m)
-moveRobot _ move _ = error $ "Unsupported move: " ++ [move]
+
+moveRobot _ move _ | not $ move `elem` "LRUD" = error $ "Command is not Robot's move: " ++ [move]
+moveRobot _ _ m = m
 
 rowHasRobot row = 'R' `V.elem` row
 
