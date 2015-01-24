@@ -9,3 +9,5 @@ dist
 .tree
 .swp
 .exe
+
+Player/node_modules/*
