@@ -1,4 +1,5 @@
 module Runtime.Emulator where
+import Data.Maybe
 
 import Runtime.Types
 import qualified Data.Vector as V
@@ -7,16 +8,19 @@ import Data.Maybe (isJust)
 
 -- TODO: we need a constants for symbols.
 
-setRobot = undefined
-emptyCell = undefined
-openLift = undefined
-setStone = undefined
+updateCell :: Char -> Position -> Maze -> Maze
+updateCell c (x, y) m = V.update m $ V.fromList [(y, row')]
+    where
+        row' = V.update row $ (V.fromList [(x, '@')])
+        row = V.unsafeIndex m x
 
-
+setRobot = updateCell 'R'
+emptyCell = updateCell ' '
+openLift m = updateCell 'O' (findObject 'L' m) m
+setStone = updateCell '*'
 
 getCell :: Position -> Maze -> Maybe Char
 getCell (x, y) m = (V.!?) m x >>= (\m' -> (V.!?) m' y)
-
 
 isRobotPassable c = c `elem` "\\. O"
 
@@ -25,7 +29,12 @@ isValidMove pos m = case getCell pos m of
     Just c -> isRobotPassable c
     Nothing -> False
 
-
+findObject :: Char -> Maze -> Position
+findObject c m = let
+    rowIdx = fromJust $ V.findIndex (V.elem c) m
+    row = V.unsafeIndex m rowIdx
+    isObject = (==) c
+    in (rowIdx, fromJust $ V.findIndex isObject row) 
 
 moveRobot current@(x, y) 'L' m | isValidMove (x - 1, y) m = setRobot (x - 1, y) (emptyCell current m)
 moveRobot current@(x, y) 'R' m | isValidMove (x + 1, y) m = setRobot (x + 1, y) (emptyCell current m)
@@ -35,16 +44,7 @@ moveRobot current@(x, y) 'D' m | isValidMove (x, y + 1) m = setRobot (x, y + 1) 
 moveRobot _ move _ | not $ move `elem` "LRUD" = error $ "Command is not Robot's move: " ++ [move]
 moveRobot _ _ m = m
 
-rowHasRobot row = 'R' `V.elem` row
-
--- TODO: check whether x and y are valid, not flipped.
-findRobot m = let
-    mbRowWithRobotIdx = V.findIndex rowHasRobot m
-    mbColumnWithRobotIdx = mbRowWithRobotIdx >>= (\rowIdx -> V.findIndex (=='R') (m V.! rowIdx))
-    in case (mbRowWithRobotIdx, mbColumnWithRobotIdx) of
-        (Just rowIdx, Just colIdx) -> (rowIdx, colIdx)
-        _ -> error "invalid maze: robot not found."
-
+findRobot = findObject 'R'
 
 runEmulation :: Maze -> Char -> Maze
 runEmulation m 'L' = moveRobot (findRobot m) 'L' m
@@ -54,3 +54,12 @@ runEmulation m 'D' = moveRobot (findRobot m) 'D' m
 runEmulation m 'W' = m
 runEmulation m 'A' = error "Abort is undefined."
 
+{-
+Move left, L, moving the Robot from (x, y) to (x − 1, yMaze).
+• Move right, R, moving the Robot from (x, y) to (x + 1, y).
+• Move up, U, moving the Robot from (x, y) to (x, y + 1).
+• Move down, D, moving the Robot from (x, y) to (x, y − 1).
+• Wait, W, which does nothing.
+• Abort, A, which abandons mine exploration.
+
+-}
