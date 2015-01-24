@@ -3,24 +3,40 @@ module Runtime.Emulator where
 import Runtime.Types
 import qualified Data.Vector as V
 
+import Data.Maybe (isJust)
+
 setRobot = undefined
 emptyCell = undefined
 openLift = undefined
 setStone = undefined
 
-isValidMove = undefined
+
+
+getCell :: Position -> Maze -> Maybe Char
+getCell (x, y) m = (V.!?) m x >>= (\m' -> (V.!?) m' y)
+
+
+isRobotPassable c = c `elem` "\\. O"
+
+isValidMove :: Position -> Maze -> Bool
+isValidMove pos m = case getCell pos m of
+    Just c -> isRobotPassable c
+    Nothing -> False
 
 
 
-moveRobot current@(x, y) 'L' m | isValidMove (x - 1, y) = setRobot (x - 1, y) (emptyCell current m)
-moveRobot _ _ _ = error "Not implemented."
+moveRobot current@(x, y) 'L' m | isValidMove (x - 1, y) m = setRobot (x - 1, y) (emptyCell current m)
+moveRobot _ _ _ = error "moveRobot not implemented."
 
-rowHasRobot = undefined
+rowHasRobot row = 'R' `V.elem` row
 
+-- TODO: check whether x and y are valid, not flipped.
 findRobot m = let
-    rowWithRobotIdx = V.findIndex rowHasRobot m
-    
-    in undefined
+    mbRowWithRobotIdx = V.findIndex rowHasRobot m
+    mbColumnWithRobotIdx = mbRowWithRobotIdx >>= (\rowIdx -> V.findIndex (=='R') (m V.! rowIdx))
+    in case (mbRowWithRobotIdx, mbColumnWithRobotIdx) of
+        (Just rowIdx, Just colIdx) -> (rowIdx, colIdx)
+        _ -> error "invalid maze: robot not found."
 
 
 runEmulation :: Maze -> Char -> Maze
