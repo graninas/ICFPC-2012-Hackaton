@@ -1,53 +1,76 @@
-var nc = require('ncurses');
+var
+    nc = require('ncurses'),
+    file = require('read-file'),
+    yargs = require('yargs');
 
 var
     index = 0,
     slides = [];
 
-process.stdin.on('readable', function() {
-    var chunk = process.stdin.read();
+var args = yargs
+    .demand(['input'])
+    .argv;
 
-    if (chunk !== null) {
-        console.log("234234" + chunk);
+var entry = null;
+
+file.readFileSync(args.input).split('\n').forEach(function(line) {
+    var tag = /^\s*>\s*(.*)$/img.exec(line);
+
+    if (tag !== null) {
+        if (entry) slides.push(entry);
+
+        entry = {
+            move: tag[1],
+            lines: []
+        };
+    } else {
+        if (entry) {
+            entry.lines.push(line);
+        }
     }
 });
 
-process.stdin.on('end', function() {
-    return;
-    var w = new nc.Window();
+if (entry) {
+    slides.push(entry);
+}
 
-    w.on('inputChar', function(symbol, code) {
-        switch (code) {
-            case 27:
-                w.close();
-                break;
+var w = new nc.Window();
 
-            case 260:
-                index = index - 1;
-                if (index < 0) index = slides.length - 1;
+w.on('inputChar', function(symbol, code) {
+    switch (code) {
+        case nc.keys.NEWLINE:
+            w.close();
+            break;
 
-                drawSlide();
-                break;
+        case nc.keys.LEFT:
+            index = index - 1;
+            if (index < 0) index = slides.length - 1;
 
-            case 261:
-                index = index + 1;
-                if (index >= slides.length) index = 0;
+            drawSlide();
+            break;
 
-                drawSlide();
-                break;
-        }
+        case nc.keys.RIGHT:
+            index = index + 1;
+            if (index >= slides.length) index = 0;
+
+            drawSlide();
+            break;
+    }
+});
+
+drawSlide();
+
+function drawSlide() {
+    var slide = slides[index];
+
+    w.clear();
+
+    w.insstr(0, 0, 'Step: ' + (index + 1) + '/' + slides.length);
+    w.insstr(1, 0, 'Move: ' + slide.move);
+
+    slide.lines.forEach(function(line, n) {
+        w.insstr(2 + n, 0, line);
     });
 
-    drawSlide();
-
-    function drawSlide(index) {
-        var slide = slides[index];
-
-        w.clear();
-
-        w.insstr(1, 1, 'Step: ' + (index + 1) + '/' + slides.length);
-        w.insstr(1, 2, 'Move: ' + slide.move);
-
-        w.refresh();
-    }
-});
+    w.refresh();
+}

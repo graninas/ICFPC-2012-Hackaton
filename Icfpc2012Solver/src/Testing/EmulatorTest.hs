@@ -21,6 +21,10 @@ testMove (src, move, expected) = do
     
 test :: IO ()
 test = do
-
     testMove ("MoveLeftFreely.txt", 'L', "MoveLeftFreely_expected.txt")
-    
+    testMove ("MoveLeftEarth.txt", 'L', "MoveLeftEarth_expected.txt")
+    testMove ("MoveLeftRock.txt", 'L', "MoveLeftRock_expected.txt")
+    testMove ("MoveLeftMovableRock.txt", 'L', "MoveLeftMovableRock_expected.txt")
+    testMove ("MoveLeftWall.txt", 'L', "MoveLeftWall_expected.txt")
+    testMove ("MoveLeftClosedLift.txt", 'L', "MoveLeftClosedLift_expected.txt")
+    testMove ("MoveLeftLambda.txt", 'L', "MoveLeftLambda_expected.txt")
