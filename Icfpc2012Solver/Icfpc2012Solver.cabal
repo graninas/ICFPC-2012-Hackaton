@@ -5,11 +5,11 @@ build-type:     Simple
 author:         gas
 license:        MIT
 data-files:     
-                Data/Mazes/001.txt, 
-                Data/TestData/OneLine.txt, 
-                Data/TestData/TwoLines.txt, 
-                Data/TestData/TwoNonPaddedLines_expected, 
-                Data/TestData/TwoNonPaddedLines.txt
+                Mazes/001.txt, 
+                TestData/OneLine.txt, 
+                TestData/TwoLines.txt, 
+                TestData/TwoNonPaddedLines_expected.txt, 
+                TestData/TwoNonPaddedLines.txt
 data-dir:       Data
 maintainer:     gas
 
@@ -27,5 +27,6 @@ executable Icfpc2012Solver
                     Runtime.Types,
                     Testing.ParserTest,
                     Common,
-                    LabyrinthParser.Validator
+                    LabyrinthParser.Validator,
+                    Runtime.Emulator
 

@@ -8,8 +8,8 @@ mazesPath = "/Mazes/"
 testDataPath :: FilePath
 testDataPath = "/TestData/"
 
-loadMaze :: FilePath -> IO String
-loadMaze file = getDataFileName (mazesPath ++ file) >>= readFile
+loadMazeFile :: FilePath -> IO String
+loadMazeFile file = getDataFileName (mazesPath ++ file) >>= readFile
 
 loadTestData :: FilePath -> IO String
 loadTestData file = getDataFileName (testDataPath ++ file) >>= readFile
