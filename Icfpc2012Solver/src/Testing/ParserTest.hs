@@ -3,6 +3,7 @@ module Testing.ParserTest where
 import Common
 import LabyrinthParser.Parser
 import Data.Either
+import Data.Either.Unwrap
 
 import Control.Monad (liftM)
 
