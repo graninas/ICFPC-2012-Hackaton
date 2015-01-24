@@ -3,7 +3,7 @@ module Testing.ParserTest where
 import Common
 import LabyrinthParser.Parser
 import Data.Either
-import Data.Either.Unwrap
+import qualified Data.Either.Unwrap as E
 
 import Control.Monad (liftM)
 
@@ -19,7 +19,7 @@ testPadding (src, expected) = do
 testParsing (src, expected) = do
     d <- loadTestData src
     let result = parse d
-    putStrLn $ (if ((isRight result && expected) || (isLeft result && not expected)) then "passed: " else "FAILED! ")
+    putStrLn $ (if ((E.isRight result && expected) || (E.isLeft result && not expected)) then "passed: " else "FAILED! ")
              ++ getTestName "testPadding" src ++ ", result: " ++
         case result of
             Right _ -> "parsed successfully."
