@@ -11,5 +11,7 @@ testDataPath = "/TestData/"
 loadMazeFile :: FilePath -> IO String
 loadMazeFile file = getDataFileName (mazesPath ++ file) >>= readFile
 
-loadTestData :: FilePath -> IO String
-loadTestData file = getDataFileName (testDataPath ++ file) >>= readFile
+type TestFixture = String
+
+loadTestData :: TestFixture -> FilePath -> IO String
+loadTestData testFixture file = getDataFileName (testDataPath ++ testFixture ++ "/" ++ file) >>= readFile

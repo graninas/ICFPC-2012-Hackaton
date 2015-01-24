@@ -29,5 +29,6 @@ executable Icfpc2012Solver
                     Testing.ParserTest,
                     Common,
                     LabyrinthParser.Validator,
-                    Runtime.Emulator
+                    Runtime.Emulator,
+                    Testing.EmulatorTest
 
