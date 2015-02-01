@@ -3,7 +3,7 @@ module LabyrinthParser.Parser where
 import Runtime.Types
 import LabyrinthParser.Validator
 
-import qualified Data.Vector as V
+import qualified Data.Matrix as M
 import qualified Data.List as L (foldl')
 
 parseDimensions :: [String] -> (Int, Int)
@@ -20,9 +20,7 @@ padRows rows = let
 
 fromRows = padRows . lines
 
-toVector rows = V.fromList $ map V.fromList rows
-
 parse :: String -> Either String Maze
-parse = validate . toVector . fromRows
+parse = validate . M.fromLists . fromRows
 
 

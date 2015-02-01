@@ -19,7 +19,7 @@ executable Icfpc2012Solver
   main-is:         Main.hs
   build-depends:   
                    base >= 4,
-                   vector >=0.10 && <0.11,
+                   matrix,
                    either-unwrap
   ghc-options:     -threaded -outputdir ./.bin
   other-modules:    

@@ -2,12 +2,13 @@ module Testing.EmulatorTest where
 
 import Common
 import Runtime.Emulator
-import Runtime.PrettyPrint as P
 import LabyrinthParser.Parser
 import Data.Either
 import qualified Data.Either.Unwrap as E
 
 import Control.Monad (liftM)
+
+-- TODO: switch to HUnit?
 
 testFixture = "Emulator"
 getTestName tName n = tName ++ ", " ++ takeWhile (/= '.') n
@@ -17,7 +18,11 @@ testMove (src, move, expected) = do
     Right e <- liftM parse $ loadTestData testFixture expected
     let result = runEmulation d move
     if (result == e) then putStrLn $ "passed: " ++ (getTestName "testMove" src) ++ "."
-                     else putStrLn $ "FAILED! " ++ (getTestName "testMove" src) ++ ". Result maze:\n" ++ (unlines $ P.toList result)
+                     else putStrLn $ "FAILED! " ++ (getTestName "testMove" src) ++ "\n" ++ (croak d e result) ++ "."
+
+croak source expected got = "Was:\n" ++ (printMaze source)
+    ++ "Expected:\n" ++ (printMaze expected)
+    ++ "Got:\n" ++ (printMaze got)
     
 test :: IO ()
 test = do

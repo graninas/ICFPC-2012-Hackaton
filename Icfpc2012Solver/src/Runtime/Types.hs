@@ -1,8 +1,7 @@
 module Runtime.Types where
 
-import qualified Data.Vector as V
+import qualified Data.Matrix as M
 
 type Cell = Char
-type MazeRow = V.Vector Cell
-type Maze = V.Vector MazeRow
+type Maze = M.Matrix Char
 type Position = (Int, Int)
