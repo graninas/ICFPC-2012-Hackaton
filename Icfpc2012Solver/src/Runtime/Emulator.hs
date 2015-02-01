@@ -63,8 +63,10 @@ Move left, L, moving the Robot from (x, y) to (x − 1, yMaze).
 • Abort, A, which abandons mine exploration.
 
 -}
-runBunchEmulation :: Maze -> String -> [Maze]
+{-
+runBunchEmulation :: Maze -> String -> Maze
 runBunchEmulation m [] = m
 runBunchEmulation m (s_head : s_tail) = let
     new_m = (runEmulation m head)
     in new_m : (runBunchEmulation new_m tail)
+-}
