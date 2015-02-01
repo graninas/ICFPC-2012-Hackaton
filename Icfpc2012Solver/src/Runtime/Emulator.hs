@@ -11,7 +11,7 @@ import Data.Maybe (isJust)
 updateCell :: Char -> Position -> Maze -> Maze
 updateCell c (x, y) m = V.update m $ V.fromList [(y, row')]
     where
-        row' = V.update row $ (V.fromList [(x, '@')])
+        row' = V.update row $ (V.fromList [(x, c)])
         row = V.unsafeIndex m x
 
 setRobot = updateCell 'R'
